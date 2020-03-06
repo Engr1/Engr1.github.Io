@@ -17,11 +17,13 @@ public class Thrust : MonoBehaviour
     public float sensitivity;
     public AudioClip Bear;
     AudioSource audioSource;
-
+    private static int Score;
+    private int Nom;  
 
     void Start()
     {
-
+        Nom = 0;
+        
         rb = GetComponent<Rigidbody>();
         Cursor.lockState = CursorLockMode.Locked;
         audioSource = GetComponent<AudioSource>();
@@ -30,7 +32,7 @@ public class Thrust : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
+        Score = CarrotCount.Carrots;
         mouseX = Input.GetAxis("Mouse X");
         mouseY = Input.GetAxis("Mouse Y");
         eyes.transform.Rotate(-mouseY*sensitivity,0,0);
@@ -71,6 +73,15 @@ public class Thrust : MonoBehaviour
         else { rb.AddForce(transform.up * 0); }
 
 
+        if(Nom >= 3)
+        {
+            SceneManager.LoadScene("Win");
+        }
+
+
+
+
+
     }
 
 
@@ -80,17 +91,32 @@ public class Thrust : MonoBehaviour
         
         if (Col.gameObject.tag == "BadThing")
         {
-            audioSource.PlayOneShot(Bear);
-
-            StartCoroutine(Example());
-            IEnumerator Example()
+            if (Score <= 9)
             {
-                yield return new WaitForSecondsRealtime(1f);
-                SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
-            }
 
+                audioSource.PlayOneShot(Bear);
+
+                StartCoroutine(Example());
+                IEnumerator Example()
+                {
+                    yield return new WaitForSecondsRealtime(1f);
+                    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+                }
+            }
+       else if(Score >= 10)
+        {
+            Destroy(Col.gameObject);
+            Nom++;
+        }
 
         }
+
+
+
+
+
+
+
     }
 
 }

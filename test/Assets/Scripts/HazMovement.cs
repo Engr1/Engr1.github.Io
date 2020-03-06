@@ -2,35 +2,59 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class HazMovement : MonoBehaviour
-{
-    // Start is called before the first frame update
-   
-   public GameObject Haz;
-   public float X;
-   public float Z;
-    void Start()
-    {
-        X = 6;
-        Z = 1;
-        
+public class HazMovement : MonoBehaviour {
+
+
+
+    Rigidbody rb;
+    public Transform Player;
+	int MaxDist = 10;
+	int MinDist = 0;
+    private static int Score;
+
+
+
+	void Start()
+	{
+        rb = GetComponent<Rigidbody>();
+
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-     Haz.transform.position = new Vector3(X, 1, Z);
-    
-    if (Haz.transform.position == new Vector3(6, 1, 1)){
-            X = X - .1f;
-           }
+	void Update()
+	{
+        Score = CarrotCount.Carrots;
+
+		
 
 
 
 
+        if (Score <= 10)
+        {transform.LookAt(Player);
+            if (Vector3.Distance(transform.position, Player.position) >= MinDist)
+            {
+                if (Vector3.Distance(transform.position, Player.position) <= MaxDist)
+                {
+                    rb.AddForce(transform.forward * 40f);
+                }
+
+            }
+        }
 
 
+        if (Score >= 10)
+        {
+            transform.LookAt(2*transform.position - Player.position);
+            if (Vector3.Distance(transform.position, Player.position) >= MinDist)
+            {   
 
+                if (Vector3.Distance(transform.position, Player.position) <= MaxDist)
+                {
+                   rb.AddForce(transform.forward * 60f); 
+                }
+
+            }
+        }
 
 
 
